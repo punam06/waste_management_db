@@ -1,11 +1,19 @@
 <?php
 // Database Connection Configuration
 class Database {
-    private $host = 'localhost';
-    private $db_name = 'wasteManagement';
-    private $user = 'root';
-    private $password = ''; // Change if you have a password
+    private $host;
+    private $db_name;
+    private $user;
+    private $password;
     private $conn;
+
+    public function __construct() {
+        // Use environment variables if available, otherwise use defaults
+        $this->host = getenv('DB_HOST') ?: 'localhost';
+        $this->db_name = getenv('DB_NAME') ?: 'wasteManagement';
+        $this->user = getenv('DB_USER') ?: 'root';
+        $this->password = getenv('DB_PASSWORD') ?: '';
+    }
 
     public function connect() {
         $this->conn = null;
