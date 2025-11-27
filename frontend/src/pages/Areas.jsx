@@ -19,9 +19,15 @@ export const Areas = () => {
 
   const fetchAreas = async () => {
     try {
+      console.log('Fetching areas...');
       const response = await areasAPI.getAll();
-      setAreas(response.data.data || []);
+      console.log('API Response:', response);
+      console.log('Response data:', response.data);
+      const areas = response.data.data || response.data || [];
+      console.log('Setting areas:', areas);
+      setAreas(Array.isArray(areas) ? areas : []);
     } catch (error) {
+      console.error('Error fetching areas:', error);
       showNotification('Error fetching areas', 'error');
     } finally {
       setLoading(false);
@@ -29,6 +35,7 @@ export const Areas = () => {
   };
 
   const handleSubmit = async (formData) => {
+    console.log('Submitting form data:', formData);
     setIsSubmitting(true);
     try {
       if (editingId) {
@@ -46,7 +53,9 @@ export const Areas = () => {
       setEditingId(null);
       
       // Wait a moment then fetch fresh data
+      console.log('Waiting 500ms before fetching areas...');
       setTimeout(() => {
+        console.log('Fetching areas after creation/update...');
         fetchAreas();
       }, 500);
     } catch (error) {
