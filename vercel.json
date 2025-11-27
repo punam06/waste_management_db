@@ -6,7 +6,7 @@
   "framework": "vite",
   "functions": {
     "api/**/*.php": {
-      "runtime": "php-9.1"
+      "runtime": "php@8.1"
     }
   },
   "routes": [
