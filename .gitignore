@@ -61,3 +61,4 @@ build/
 ._*
 .AppleDouble
 .LSOverride
+.vercel
