@@ -32,16 +32,25 @@ export const Areas = () => {
     setIsSubmitting(true);
     try {
       if (editingId) {
-        await areasAPI.update(editingId, formData);
+        const response = await areasAPI.update(editingId, formData);
+        console.log('Update response:', response);
         showNotification('Area updated successfully', 'success');
       } else {
-        await areasAPI.create(formData);
+        const response = await areasAPI.create(formData);
+        console.log('Create response:', response);
         showNotification('Area created successfully', 'success');
       }
+      
+      // Close modal immediately
       setIsModalOpen(false);
       setEditingId(null);
-      fetchAreas();
+      
+      // Wait a moment then fetch fresh data
+      setTimeout(() => {
+        fetchAreas();
+      }, 500);
     } catch (error) {
+      console.error('Submit error:', error);
       showNotification(error.response?.data?.error || 'Error saving area', 'error');
     } finally {
       setIsSubmitting(false);
@@ -157,7 +166,7 @@ export const Areas = () => {
         title={editingId ? 'Edit Area' : 'Add New Area'}
       >
         <Form
-          key={editingId || 'new'}
+          key={`${isModalOpen}-${editingId}`}
           onSubmit={handleSubmit}
           isLoading={isSubmitting}
           fields={[
