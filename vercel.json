@@ -2,7 +2,7 @@
   "buildCommand": "cd frontend && npm run build",
   "outputDirectory": "frontend/dist",
   "devCommand": "cd frontend && npm run dev",
-  "installCommand": "npm install && cd frontend && npm install",
+  "installCommand": "npm install && npm run install-all",
   "framework": "vite",
   "env": {
     "VITE_API_BASE_URL": "http://localhost:8000",
