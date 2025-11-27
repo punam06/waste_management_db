@@ -2,17 +2,24 @@
   "name": "waste-management-system",
   "version": "1.0.0",
   "description": "Waste Management System - Full Stack Application",
-  "main": "index.js",
+  "main": "api/index.js",
   "scripts": {
     "install-all": "npm install && cd frontend && npm install",
     "dev": "cd frontend && npm run dev",
     "build": "cd frontend && npm run build",
-    "preview": "cd frontend && npm run preview"
+    "preview": "cd frontend && npm run preview",
+    "start": "node api/index.js"
   },
-  "keywords": ["waste", "management", "system", "react", "php"],
+  "keywords": ["waste", "management", "system", "react", "nodejs"],
   "author": "",
   "license": "MIT",
   "engines": {
     "node": "22.x"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mysql2": "^3.6.5",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1"
   }
 }

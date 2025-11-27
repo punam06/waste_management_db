@@ -1,11 +1,21 @@
 {
-  "buildCommand": "cd frontend && npm run build",
+  "buildCommand": "npm install && cd frontend && npm run build",
   "outputDirectory": "frontend/dist",
   "devCommand": "cd frontend && npm run dev",
-  "installCommand": "npm install && npm run install-all",
+  "installCommand": "npm install && cd frontend && npm install",
   "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
   "env": {
-    "VITE_API_BASE_URL": "https://your-ngrok-url.ngrok.io",
+    "VITE_API_BASE_URL": "/api",
     "VITE_APP_NAME": "Waste Management System",
     "VITE_APP_VERSION": "1.0.0"
   }
