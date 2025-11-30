@@ -19,36 +19,40 @@ export const Areas = () => {
 
   const fetchAreas = async () => {
     try {
-      console.log('Fetching areas...');
+      console.log('🔄 Fetching areas from API...');
       const response = await areasAPI.getAll();
-      console.log('Full API Response:', response);
-      console.log('Response status:', response.status);
-      console.log('Response data:', response.data);
-      console.log('Response data type:', typeof response.data);
+      console.log('✅ Full API Response received:', response);
+      console.log('   Status:', response.status);
+      console.log('   Data structure:', response.data);
       
       // API returns { success: true, data: [...] }
       let areasData = [];
-      if (response.data && response.data.data) {
-        console.log('Extracting from response.data.data');
+      
+      // Multiple extraction strategies
+      if (response.data?.data && Array.isArray(response.data.data)) {
+        console.log('✓ Strategy 1: Extracting from response.data.data');
         areasData = response.data.data;
-      } else if (response.data && Array.isArray(response.data)) {
-        console.log('Response.data is already an array');
+      } else if (Array.isArray(response.data)) {
+        console.log('✓ Strategy 2: Response.data is already an array');
         areasData = response.data;
-      } else if (Array.isArray(response.data?.data)) {
-        console.log('Extracting array from response.data.data');
+      } else if (response.data?.success && response.data?.data) {
+        console.log('✓ Strategy 3: Success response with nested data');
         areasData = response.data.data;
       }
       
-      console.log('Extracted areas data:', areasData);
-      console.log('Areas count:', areasData.length);
+      console.log('📊 Extracted areas:', areasData);
+      console.log('   Count:', Array.isArray(areasData) ? areasData.length : 0);
+      console.log('   Data type:', typeof areasData);
       
       const validAreas = Array.isArray(areasData) ? areasData : [];
-      console.log('Setting areas state with:', validAreas);
+      console.log('💾 Setting UI state with', validAreas.length, 'areas');
       setAreas(validAreas);
     } catch (error) {
-      console.error('Error fetching areas:', error);
-      console.error('Error message:', error.message);
-      console.error('Error response:', error.response?.data);
+      console.error('❌ Error fetching areas:');
+      console.error('   Message:', error.message);
+      console.error('   Status:', error.response?.status);
+      console.error('   Data:', error.response?.data);
+      console.error('   Config URL:', error.config?.url);
       showNotification('Error fetching areas', 'error');
       setAreas([]);
     } finally {
@@ -57,16 +61,18 @@ export const Areas = () => {
   };
 
   const handleSubmit = async (formData) => {
-    console.log('Submitting form data:', formData);
+    console.log('📝 Submitting form data:', formData);
     setIsSubmitting(true);
     try {
       if (editingId) {
+        console.log('🔄 Updating area:', editingId);
         const response = await areasAPI.update(editingId, formData);
-        console.log('Update response:', response);
+        console.log('✅ Update response:', response);
         showNotification('Area updated successfully', 'success');
       } else {
+        console.log('✨ Creating new area');
         const response = await areasAPI.create(formData);
-        console.log('Create response:', response);
+        console.log('✅ Create response:', response);
         showNotification('Area created successfully', 'success');
       }
       
@@ -74,15 +80,18 @@ export const Areas = () => {
       setIsModalOpen(false);
       setEditingId(null);
       
-      // Small delay to ensure database write is complete
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Wait for database write to complete
+      console.log('⏳ Waiting 1 second for database to complete write...');
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
       // Fetch fresh data immediately after successful creation/update
-      console.log('Calling fetchAreas after create/update...');
+      console.log('🔄 Refreshing areas list from server...');
       await fetchAreas();
-      console.log('Areas fetched successfully after creation/update');
+      console.log('✅ Areas list refreshed successfully');
     } catch (error) {
-      console.error('Submit error:', error);
+      console.error('❌ Submit error:', error);
+      console.error('   Message:', error.message);
+      console.error('   Response:', error.response?.data);
       showNotification(error.response?.data?.error || 'Error saving area', 'error');
     } finally {
       setIsSubmitting(false);

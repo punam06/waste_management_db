@@ -19,7 +19,29 @@ export const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  timeout: 10000,
 });
+
+// Add response interceptor for debugging
+api.interceptors.response.use(
+  response => {
+    console.log('API Response Interceptor:', {
+      status: response.status,
+      url: response.config.url,
+      data: response.data,
+    });
+    return response;
+  },
+  error => {
+    console.error('API Error Interceptor:', {
+      message: error.message,
+      status: error.response?.status,
+      url: error.config?.url,
+      data: error.response?.data,
+    });
+    return Promise.reject(error);
+  }
+);
 
 // Areas
 export const areasAPI = {
