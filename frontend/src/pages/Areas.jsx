@@ -21,21 +21,34 @@ export const Areas = () => {
     try {
       console.log('Fetching areas...');
       const response = await areasAPI.getAll();
-      console.log('API Response:', response);
+      console.log('Full API Response:', response);
+      console.log('Response status:', response.status);
       console.log('Response data:', response.data);
+      console.log('Response data type:', typeof response.data);
       
       // API returns { success: true, data: [...] }
       let areasData = [];
       if (response.data && response.data.data) {
+        console.log('Extracting from response.data.data');
         areasData = response.data.data;
       } else if (response.data && Array.isArray(response.data)) {
+        console.log('Response.data is already an array');
         areasData = response.data;
+      } else if (Array.isArray(response.data?.data)) {
+        console.log('Extracting array from response.data.data');
+        areasData = response.data.data;
       }
       
-      console.log('Extracted areas:', areasData);
-      setAreas(Array.isArray(areasData) ? areasData : []);
+      console.log('Extracted areas data:', areasData);
+      console.log('Areas count:', areasData.length);
+      
+      const validAreas = Array.isArray(areasData) ? areasData : [];
+      console.log('Setting areas state with:', validAreas);
+      setAreas(validAreas);
     } catch (error) {
       console.error('Error fetching areas:', error);
+      console.error('Error message:', error.message);
+      console.error('Error response:', error.response?.data);
       showNotification('Error fetching areas', 'error');
       setAreas([]);
     } finally {
@@ -61,10 +74,13 @@ export const Areas = () => {
       setIsModalOpen(false);
       setEditingId(null);
       
+      // Small delay to ensure database write is complete
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
       // Fetch fresh data immediately after successful creation/update
       console.log('Calling fetchAreas after create/update...');
       await fetchAreas();
-      console.log('Areas fetched successfully');
+      console.log('Areas fetched successfully after creation/update');
     } catch (error) {
       console.error('Submit error:', error);
       showNotification(error.response?.data?.error || 'Error saving area', 'error');
@@ -85,7 +101,10 @@ export const Areas = () => {
       
       if (response.data && response.data.success) {
         showNotification('Area deleted successfully!', 'success');
-        fetchAreas();
+        // Small delay to ensure database write is complete
+        await new Promise(resolve => setTimeout(resolve, 500));
+        // Refresh the list
+        await fetchAreas();
       } else {
         showNotification(response.data?.error || 'Failed to delete area', 'error');
       }
