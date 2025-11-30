@@ -57,7 +57,7 @@ export const Waste = () => {
       }
       setIsModalOpen(false);
       setEditingId(null);
-      fetchWastes();
+      await fetchWastes();
     } catch (error) {
       showNotification(error.response?.data?.error || 'Error saving waste record', 'error');
     } finally {
@@ -70,7 +70,7 @@ export const Waste = () => {
       try {
         await wasteAPI.delete(id);
         showNotification('Waste record deleted successfully', 'success');
-        fetchWastes();
+        await fetchWastes();
       } catch (error) {
         showNotification(error.response?.data?.error || 'Error deleting waste record', 'error');
       }

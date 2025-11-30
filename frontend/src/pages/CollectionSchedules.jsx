@@ -44,7 +44,7 @@ export const CollectionSchedules = () => {
       }
       setIsModalOpen(false);
       setEditingId(null);
-      fetchData();
+      await fetchData();
     } catch (error) {
       showNotification(error.response?.data?.error || 'Error saving schedule', 'error');
     } finally {
@@ -62,7 +62,7 @@ export const CollectionSchedules = () => {
       try {
         await schedulesAPI.delete(id);
         showNotification('Schedule deleted successfully', 'success');
-        fetchData();
+        await fetchData();
       } catch (error) {
         showNotification(error.response?.data?.error || 'Error deleting schedule', 'error');
       }

@@ -44,7 +44,7 @@ export const Crew = () => {
       }
       setIsModalOpen(false);
       setEditingId(null);
-      fetchData();
+      await fetchData();
     } catch (error) {
       showNotification(error.response?.data?.error || 'Error saving crew member', 'error');
     } finally {
@@ -57,7 +57,7 @@ export const Crew = () => {
       try {
         await crewAPI.delete(id);
         showNotification('Crew member deleted successfully', 'success');
-        fetchData();
+        await fetchData();
       } catch (error) {
         showNotification(error.response?.data?.error || 'Error deleting crew member', 'error');
       }

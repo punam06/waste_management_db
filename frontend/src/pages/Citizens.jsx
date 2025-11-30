@@ -47,7 +47,7 @@ export const Citizens = () => {
       }
       setIsModalOpen(false);
       setEditingId(null);
-      fetchCitizens();
+      await fetchCitizens();
     } catch (error) {
       showNotification(error.response?.data?.error || 'Error saving citizen', 'error');
     } finally {
@@ -60,7 +60,7 @@ export const Citizens = () => {
       try {
         await citizensAPI.delete(id);
         showNotification('Citizen deleted successfully', 'success');
-        fetchCitizens();
+        await fetchCitizens();
       } catch (error) {
         showNotification(error.response?.data?.error || 'Error deleting citizen', 'error');
       }

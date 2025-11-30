@@ -23,12 +23,21 @@ export const Areas = () => {
       const response = await areasAPI.getAll();
       console.log('API Response:', response);
       console.log('Response data:', response.data);
-      const areas = response.data.data || response.data || [];
-      console.log('Setting areas:', areas);
-      setAreas(Array.isArray(areas) ? areas : []);
+      
+      // API returns { success: true, data: [...] }
+      let areasData = [];
+      if (response.data && response.data.data) {
+        areasData = response.data.data;
+      } else if (response.data && Array.isArray(response.data)) {
+        areasData = response.data;
+      }
+      
+      console.log('Extracted areas:', areasData);
+      setAreas(Array.isArray(areasData) ? areasData : []);
     } catch (error) {
       console.error('Error fetching areas:', error);
       showNotification('Error fetching areas', 'error');
+      setAreas([]);
     } finally {
       setLoading(false);
     }
@@ -52,12 +61,10 @@ export const Areas = () => {
       setIsModalOpen(false);
       setEditingId(null);
       
-      // Wait a moment then fetch fresh data
-      console.log('Waiting 500ms before fetching areas...');
-      setTimeout(() => {
-        console.log('Fetching areas after creation/update...');
-        fetchAreas();
-      }, 500);
+      // Fetch fresh data immediately after successful creation/update
+      console.log('Calling fetchAreas after create/update...');
+      await fetchAreas();
+      console.log('Areas fetched successfully');
     } catch (error) {
       console.error('Submit error:', error);
       showNotification(error.response?.data?.error || 'Error saving area', 'error');

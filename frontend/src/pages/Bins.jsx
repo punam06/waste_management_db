@@ -50,7 +50,7 @@ export const Bins = () => {
       }
       setIsModalOpen(false);
       setEditingId(null);
-      fetchBins();
+      await fetchBins();
     } catch (error) {
       showNotification(error.response?.data?.error || 'Error saving bin', 'error');
     } finally {
@@ -69,7 +69,7 @@ export const Bins = () => {
       showNotification('Fill level updated successfully', 'success');
       setIsFillModalOpen(false);
       setEditingFillLevel(null);
-      fetchBins();
+      await fetchBins();
     } catch (error) {
       showNotification(error.response?.data?.error || 'Error updating fill level', 'error');
     }
@@ -80,7 +80,7 @@ export const Bins = () => {
       try {
         await binsAPI.delete(id);
         showNotification('Bin deleted successfully', 'success');
-        fetchBins();
+        await fetchBins();
       } catch (error) {
         showNotification(error.response?.data?.error || 'Error deleting bin', 'error');
       }

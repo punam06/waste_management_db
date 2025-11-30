@@ -52,7 +52,7 @@ export const Bills = () => {
       }
       setIsModalOpen(false);
       setEditingId(null);
-      fetchBills();
+      await fetchBills();
     } catch (error) {
       showNotification(error.response?.data?.error || 'Error saving bill', 'error');
     } finally {
@@ -65,7 +65,7 @@ export const Bills = () => {
       try {
         await billsAPI.delete(id);
         showNotification('Bill deleted successfully', 'success');
-        fetchBills();
+        await fetchBills();
       } catch (error) {
         showNotification(error.response?.data?.error || 'Error deleting bill', 'error');
       }

@@ -39,7 +39,7 @@ export const RecyclingCenters = () => {
       }
       setIsModalOpen(false);
       setEditingId(null);
-      fetchCenters();
+      await fetchCenters();
     } catch (error) {
       showNotification(error.response?.data?.error || 'Error saving recycling center', 'error');
     } finally {
@@ -52,7 +52,7 @@ export const RecyclingCenters = () => {
       try {
         await centersAPI.delete(id);
         showNotification('Recycling center deleted successfully', 'success');
-        fetchCenters();
+        await fetchCenters();
       } catch (error) {
         showNotification(error.response?.data?.error || 'Error deleting recycling center', 'error');
       }

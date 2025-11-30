@@ -46,8 +46,8 @@ export const Payments = () => {
       await paymentsAPI.create(formData);
       showNotification('Payment recorded successfully', 'success');
       setIsModalOpen(false);
-      fetchPayments();
-      fetchBills();
+      await fetchPayments();
+      await fetchBills();
     } catch (error) {
       showNotification(error.response?.data?.error || 'Error recording payment', 'error');
     } finally {
